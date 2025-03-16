@@ -1,0 +1,51 @@
+diff --git a/opendbc/safety/safety.h b/opendbc/safety/safety.h
+index f73db5bf..ec4db3d6 100644
+--- a/opendbc/safety/safety.h
++++ b/opendbc/safety/safety.h
+@@ -69,6 +69,7 @@ const int MAX_WRONG_COUNTERS = 5;
+ 
+ // This can be set by the safety hooks
+ bool controls_allowed = false;
++bool lateral_controls_allowed = true;
+ bool relay_malfunction = false;
+ bool gas_pressed = false;
+ bool gas_pressed_prev = false;
+@@ -604,7 +605,7 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const TorqueStee
+   bool violation = false;
+   uint32_t ts = microsecond_timer_get();
+ 
+-  if (controls_allowed) {
++  if (controls_allowed || lateral_controls_allowed) {
+     // *** global torque limit check ***
+     violation |= max_limit_check(desired_torque, limits.max_steer, -limits.max_steer);
+ 
+@@ -631,7 +632,7 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const TorqueStee
+   }
+ 
+   // no torque if controls is not allowed
+-  if (!controls_allowed && (desired_torque != 0)) {
++  if ((!controls_allowed && !lateral_controls_allowed) && (desired_torque != 0)) {
+     violation = true;
+   }
+ 
+@@ -673,7 +674,7 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const TorqueStee
+   }
+ 
+   // reset to 0 if either controls is not allowed or there's a violation
+-  if (violation || !controls_allowed) {
++  if (violation || (!controls_allowed && !lateral_controls_allowed)) {
+     valid_steer_req_count = 0;
+     invalid_steer_req_count = 0;
+     desired_torque_last = 0;
+diff --git a/opendbc/safety/safety_declarations.h b/opendbc/safety/safety_declarations.h
+index 986164fa..0d49c6fd 100644
+--- a/opendbc/safety/safety_declarations.h
++++ b/opendbc/safety/safety_declarations.h
+@@ -197,6 +197,7 @@ void safety_tick(const safety_config *safety_config);
+ 
+ // This can be set by the safety hooks
+ extern bool controls_allowed;
++extern bool lateral_controls_allowed;
+ extern bool relay_malfunction;
+ extern bool gas_pressed;
+ extern bool gas_pressed_prev;
