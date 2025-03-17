@@ -9,7 +9,7 @@
   .max_rate_down = (rate_down), \
   .max_rt_delta = 224, \
   .max_rt_interval = 200000, \
-  .driver_torque_allowance = 50, \
+  .driver_torque_allowance = 70, \
   .driver_torque_multiplier = 2, \
   .type = TorqueDriverLimited, \
    /* the EPS faults when the steering angle is above a certain threshold for too long. to prevent this, */ \
