@@ -25,12 +25,12 @@ class CarControllerParams:
     self.STEER_STEP = 1  # 100 Hz
 
     if CP.flags & HyundaiFlags.CANFD:
-      self.STEER_MAX = 336
+      self.STEER_MAX = 384
       self.STEER_DRIVER_ALLOWANCE = 250
       self.STEER_DRIVER_MULTIPLIER = 2
       self.STEER_THRESHOLD = 250
-      self.STEER_DELTA_UP = 3
-      self.STEER_DELTA_DOWN = 5
+      self.STEER_DELTA_UP = 4
+      self.STEER_DELTA_DOWN = 7
 
     # To determine the limit for your car, find the maximum value that the stock LKAS will request.
     # If the max stock LKAS request is <384, add your car to this list.
@@ -41,9 +41,9 @@ class CarControllerParams:
 
     # these cars have significantly more torque than most HKG; limit to 70% of max
     elif CP.flags & HyundaiFlags.ALT_LIMITS:
-      self.STEER_MAX = 336
-      self.STEER_DELTA_UP = 3
-      self.STEER_DELTA_DOWN = 5
+      self.STEER_MAX = 384
+      self.STEER_DELTA_UP = 4
+      self.STEER_DELTA_DOWN = 7
 
     elif CP.flags & HyundaiFlags.ALT_LIMITS_2:
       self.STEER_MAX = 170
@@ -52,7 +52,7 @@ class CarControllerParams:
 
     # Default for most HKG
     else:
-      self.STEER_MAX = 384
+      self.STEER_MAX = 409
 
 
 class HyundaiSafetyFlags(IntFlag):
